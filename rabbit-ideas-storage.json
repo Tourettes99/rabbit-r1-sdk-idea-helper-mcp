@@ -1,0 +1,832 @@
+{
+  "lastChecked": null,
+  "suggestedIdeas": [
+    {
+      "name": "Reality Narrator",
+      "description": "Point your R1 camera at anything, and it generates a dramatic movie-style voiceover narration in real-time, turning mundane moments into cinematic experiences.",
+      "features": [
+        "Camera AI",
+        "voice synthesis",
+        "multiple narrator styles (noir detective, nature documentary, action thriller)",
+        "real-time narration"
+      ],
+      "category": "Entertainment",
+      "id": "idea_1760568646828_0_lbhpzs7uv",
+      "generatedAt": "2025-10-15T22:50:46.828Z"
+    },
+    {
+      "name": "Sonic Painter",
+      "description": "Create visual art by making sounds. Hum, beatbox, or tap rhythms, and watch the R1 generate abstract art based on audio frequency, amplitude, and pattern.",
+      "features": [
+        "Audio input",
+        "AI art generation",
+        "save/share creations",
+        "rhythm detection",
+        "visual feedback"
+      ],
+      "category": "Creative Tools",
+      "id": "idea_1760568646828_1_le58ircrx",
+      "generatedAt": "2025-10-15T22:50:46.828Z"
+    },
+    {
+      "name": "Pocket Therapist Log",
+      "description": "A private emotional check-in journal that uses voice input to track your mood patterns over time, offering gentle AI-generated insights without storing sensitive data externally.",
+      "features": [
+        "Voice journaling",
+        "emotion tracking",
+        "privacy-first design",
+        "weekly summaries",
+        "pattern analysis"
+      ],
+      "category": "Wellness",
+      "id": "idea_1760568646828_2_lptapsm0x",
+      "generatedAt": "2025-10-15T22:50:46.828Z"
+    },
+    {
+      "name": "Debate Devil",
+      "description": "The AI takes the opposite position of whatever you say, creating instant intellectual debates on any topic. Practice argumentation or explore different perspectives.",
+      "features": [
+        "Voice debate mode",
+        "logical fallacy detection",
+        "argument strength scoring",
+        "topic flexibility"
+      ],
+      "category": "Education",
+      "id": "idea_1760568646828_3_1bg1rexoy",
+      "generatedAt": "2025-10-15T22:50:46.828Z"
+    },
+    {
+      "name": "Plant Whisperer",
+      "description": "Point the camera at any plant, and the R1 identifies it and 'speaks' as the plant, telling you what it needs (water, sunlight, care tips) in a personalized voice.",
+      "features": [
+        "Plant identification",
+        "care schedules",
+        "watering reminders",
+        "growth tracking",
+        "personalized plant voice"
+      ],
+      "category": "Lifestyle",
+      "id": "idea_1760568646828_4_7igk2hc21",
+      "generatedAt": "2025-10-15T22:50:46.828Z"
+    },
+    {
+      "name": "Time Machine Radio",
+      "description": "Select any year from 1920-2024, and the R1 generates a 'radio broadcast' from that era with period-appropriate music styles, news themes, and announcer voice.",
+      "features": [
+        "Historical context generation",
+        "era-specific audio styling",
+        "educational facts",
+        "year selection"
+      ],
+      "category": "Entertainment",
+      "id": "idea_1760568646828_5_53sdgtwp8",
+      "generatedAt": "2025-10-15T22:50:46.828Z"
+    },
+    {
+      "name": "Micro Task Destroyer",
+      "description": "Voice-activated rapid task completion tool. Say tasks aloud, R1 breaks them into 2-minute micro-tasks, and uses scroll wheel to mark complete with satisfying sounds.",
+      "features": [
+        "Voice task input",
+        "smart task breakdown",
+        "completion streaks",
+        "dopamine rewards",
+        "ADHD-friendly"
+      ],
+      "category": "Productivity",
+      "id": "idea_1760568646828_6_l1zyai609",
+      "generatedAt": "2025-10-15T22:50:46.828Z"
+    },
+    {
+      "name": "Dream Decoder",
+      "description": "Record dream descriptions via voice right when you wake up. R1 analyzes recurring symbols, themes, and patterns over time to find meaning in your dream world.",
+      "features": [
+        "Voice recording",
+        "symbol tracking",
+        "pattern recognition",
+        "dream journal export",
+        "temporal analysis"
+      ],
+      "category": "Wellness",
+      "id": "idea_1760568646828_7_29phreyx2",
+      "generatedAt": "2025-10-15T22:50:46.828Z"
+    },
+    {
+      "name": "Accent Coach",
+      "description": "Choose any accent (British, Australian, Southern US, etc.), speak a phrase, and get real-time feedback on pronunciation, intonation, and authenticity.",
+      "features": [
+        "Accent library",
+        "pronunciation scoring",
+        "phrase practice",
+        "phonetic breakdown",
+        "real-time feedback"
+      ],
+      "category": "Education",
+      "id": "idea_1760568646828_8_ciflzg0h6",
+      "generatedAt": "2025-10-15T22:50:46.828Z"
+    },
+    {
+      "name": "Story Dice",
+      "description": "Roll virtual dice to generate random story elements (character, setting, conflict, object) and challenge yourself or friends to create stories in 60 seconds.",
+      "features": [
+        "Random generation",
+        "timer mode",
+        "save stories",
+        "difficulty levels",
+        "creative prompts"
+      ],
+      "category": "Creative Tools",
+      "id": "idea_1760568646828_9_8ymbh4xls",
+      "generatedAt": "2025-10-15T22:50:46.828Z"
+    },
+    {
+      "name": "Calorie Detective",
+      "description": "Point camera at food, and R1 estimates calories and macros while speaking them aloud. No logging required—just awareness in the moment.",
+      "features": [
+        "Food recognition",
+        "nutritional estimation",
+        "meal streak tracking",
+        "voice output",
+        "mindful eating focus"
+      ],
+      "category": "Health",
+      "id": "idea_1760568646828_10_kvzds9k7v",
+      "generatedAt": "2025-10-15T22:50:46.828Z"
+    },
+    {
+      "name": "Ambient World Builder",
+      "description": "Create custom ambient soundscapes by mixing layers (rain, fire, wind, cafe chatter, etc.) using scroll wheel and buttons. Perfect for focus or sleep.",
+      "features": [
+        "Sound layer mixing",
+        "save presets",
+        "timer-based fade out",
+        "location-based auto-start",
+        "hardware integration"
+      ],
+      "category": "Productivity",
+      "id": "idea_1760568646828_11_v2eiw8vva",
+      "generatedAt": "2025-10-15T22:50:46.828Z"
+    },
+    {
+      "name": "Compliment Generator",
+      "description": "Feeling down? R1 generates personalized, genuine-sounding compliments based on time of day, recent activity, or just random positivity.",
+      "features": [
+        "Context-aware compliments",
+        "daily affirmations",
+        "voice delivery",
+        "mood tracking",
+        "personalization"
+      ],
+      "category": "Wellness",
+      "id": "idea_1760568646828_12_l2ce9lk36",
+      "generatedAt": "2025-10-15T22:50:46.828Z"
+    },
+    {
+      "name": "Object Orchestra",
+      "description": "Tap any object with the R1, and it identifies the material and plays corresponding musical notes (wood = marimba, metal = bells, glass = chimes).",
+      "features": [
+        "Material detection",
+        "musical mapping",
+        "recording mode",
+        "beat sequencer",
+        "audio feedback"
+      ],
+      "category": "Entertainment",
+      "id": "idea_1760568646828_13_xjsazih9d",
+      "generatedAt": "2025-10-15T22:50:46.828Z"
+    },
+    {
+      "name": "Walking Story",
+      "description": "As you walk with R1, it generates an evolving audio story based on your step count, speed, and direction changes. The story adapts to your movement.",
+      "features": [
+        "Motion tracking",
+        "adaptive storytelling",
+        "achievement unlocks",
+        "multiple genres",
+        "fitness gamification"
+      ],
+      "category": "Entertainment",
+      "id": "idea_1760568646828_14_t4hk5851y",
+      "generatedAt": "2025-10-15T22:50:46.828Z"
+    },
+    {
+      "name": "Menu Translator Plus",
+      "description": "Point at foreign language menus, and R1 translates AND describes what dishes actually taste like, plus dietary warnings (spicy, allergens, etc.).",
+      "features": [
+        "OCR translation",
+        "dish descriptions",
+        "allergen detection",
+        "restaurant recommendations",
+        "camera integration"
+      ],
+      "category": "Travel",
+      "id": "idea_1760568646828_15_5equ9rq0m",
+      "generatedAt": "2025-10-15T22:50:46.828Z"
+    },
+    {
+      "name": "Quick Math Tutor",
+      "description": "Say any math problem aloud, R1 solves it step-by-step with voice explanation. Great for homework help or mental math practice.",
+      "features": [
+        "Voice problem input",
+        "step-by-step solutions",
+        "difficulty progression",
+        "quiz mode",
+        "educational focus"
+      ],
+      "category": "Education",
+      "id": "idea_1760568646828_16_gs83c3n5y",
+      "generatedAt": "2025-10-15T22:50:46.828Z"
+    },
+    {
+      "name": "Pet Mood Reader",
+      "description": "Point camera at your pet (cat, dog, bird, etc.), and R1 analyzes body language to 'translate' what they might be feeling or wanting.",
+      "features": [
+        "Pet detection",
+        "body language analysis",
+        "mood interpretation",
+        "care suggestions",
+        "animal AI"
+      ],
+      "category": "Lifestyle",
+      "id": "idea_1760568646828_17_kerokz6sr",
+      "generatedAt": "2025-10-15T22:50:46.828Z"
+    },
+    {
+      "name": "Silence Sanctuary",
+      "description": "A meditation app that detects ambient noise levels and only plays meditation guidance during actual quiet moments. Adapts to your noisy environment.",
+      "features": [
+        "Noise detection",
+        "adaptive guidance",
+        "breathing exercises",
+        "progress tracking",
+        "environment-aware"
+      ],
+      "category": "Wellness",
+      "id": "idea_1760568646828_18_dgkknnkgk",
+      "generatedAt": "2025-10-15T22:50:46.828Z"
+    },
+    {
+      "name": "Fashion Roulette",
+      "description": "Struggling with outfit decisions? R1 asks your mood and occasion, then generates a random outfit combo from your wardrobe categories with style reasoning.",
+      "features": [
+        "Mood input",
+        "occasion selection",
+        "outfit generation",
+        "style tips",
+        "weather integration"
+      ],
+      "category": "Lifestyle",
+      "id": "idea_1760568646828_19_kyshkklk0",
+      "generatedAt": "2025-10-15T22:50:46.828Z"
+    },
+    {
+      "name": "Color Thief",
+      "description": "Point your R1 at any object, and it extracts the exact color palette with HEX codes, RGB values, and suggests complementary colors for designers.",
+      "features": [
+        "Camera color extraction",
+        "palette generation",
+        "color harmony suggestions",
+        "save palettes",
+        "designer mode"
+      ],
+      "category": "Creative Tools",
+      "id": "idea_1760568995968_0_v0db1oa8s",
+      "generatedAt": "2025-10-15T22:56:35.968Z"
+    },
+    {
+      "name": "Lie Detector Game",
+      "description": "Tell the R1 three statements (2 truths, 1 lie), and it uses voice analysis patterns to guess which one is the lie. Play with friends!",
+      "features": [
+        "Voice pattern analysis",
+        "game modes",
+        "multiplayer scoring",
+        "difficulty levels",
+        "fun feedback"
+      ],
+      "category": "Entertainment",
+      "id": "idea_1760568995968_1_ftwgvwrk6",
+      "generatedAt": "2025-10-15T22:56:35.968Z"
+    },
+    {
+      "name": "Nostalgia Generator",
+      "description": "Input your birth year, and R1 generates personalized memories: 'When you were 7, Pokémon Red came out. The price of gas was $1.12...'",
+      "features": [
+        "Historical data",
+        "personalized timelines",
+        "major events",
+        "pop culture references",
+        "shareable memories"
+      ],
+      "category": "Entertainment",
+      "id": "idea_1760568995968_2_218v6y6mi",
+      "generatedAt": "2025-10-15T22:56:35.968Z"
+    },
+    {
+      "name": "Breath Pacer",
+      "description": "Visual and audio breathing guidance that syncs to your current heart rate (if you manually input it) for optimal stress reduction.",
+      "features": [
+        "Customizable breath patterns",
+        "stress level detection",
+        "guided sessions",
+        "progress tracking"
+      ],
+      "category": "Wellness",
+      "id": "idea_1760568995968_3_q27mrm8q1",
+      "generatedAt": "2025-10-15T22:56:35.968Z"
+    },
+    {
+      "name": "Recipe Remix",
+      "description": "Say what ingredients you have, and R1 generates unusual recipe combinations you'd never think of, complete with cooking instructions.",
+      "features": [
+        "Ingredient parsing",
+        "creative recipe generation",
+        "dietary restrictions",
+        "step-by-step voice guidance"
+      ],
+      "category": "Lifestyle",
+      "id": "idea_1760568995968_4_0lx7l23o9",
+      "generatedAt": "2025-10-15T22:56:35.968Z"
+    },
+    {
+      "name": "Conspiracy Bot",
+      "description": "Input any mundane fact, and R1 generates an absurdly elaborate conspiracy theory about it for entertainment purposes.",
+      "features": [
+        "Theory generation",
+        "escalating absurdity",
+        "famous conspiracy styles",
+        "share function"
+      ],
+      "category": "Entertainment",
+      "id": "idea_1760568995968_5_8c62gwx9o",
+      "generatedAt": "2025-10-15T22:56:35.968Z"
+    },
+    {
+      "name": "Sound Identifier",
+      "description": "Hear a strange noise? R1 listens and identifies common sounds (bird species, car problems, appliance issues, instrument notes).",
+      "features": [
+        "Sound recognition",
+        "audio database",
+        "troubleshooting tips",
+        "recording function"
+      ],
+      "category": "Utility",
+      "id": "idea_1760568995968_6_bmxx2cwue",
+      "generatedAt": "2025-10-15T22:56:35.968Z"
+    },
+    {
+      "name": "Habit Stack Builder",
+      "description": "Create 'habit chains' where completing one micro-habit automatically reminds you of the next. Voice-activated throughout your morning routine.",
+      "features": [
+        "Chain creation",
+        "voice check-ins",
+        "streak tracking",
+        "time-based triggers",
+        "routine optimization"
+      ],
+      "category": "Productivity",
+      "id": "idea_1760568995968_7_dxawrz7xn",
+      "generatedAt": "2025-10-15T22:56:35.968Z"
+    },
+    {
+      "name": "Emoji Translator",
+      "description": "Speak a sentence, and R1 converts it into an emoji sequence. Or show emoji sequence and hear the translation. Fun communication tool!",
+      "features": [
+        "Speech to emoji",
+        "emoji to speech",
+        "emoji combinations",
+        "save favorites"
+      ],
+      "category": "Fun",
+      "id": "idea_1760568995968_8_8bbr54qy4",
+      "generatedAt": "2025-10-15T22:56:35.968Z"
+    },
+    {
+      "name": "Price Historian",
+      "description": "Scan or say any product name, and R1 tells you what it cost in different decades adjusted for inflation. 'That coffee would've cost...'",
+      "features": [
+        "Inflation calculator",
+        "historical pricing",
+        "decade comparison",
+        "economic context"
+      ],
+      "category": "Education",
+      "id": "idea_1760568995968_9_cbw427zhl",
+      "generatedAt": "2025-10-15T22:56:35.968Z"
+    },
+    {
+      "name": "Reverse Dictionary",
+      "description": "Describe a concept or feeling you can't name, and R1 finds the exact word you're thinking of. Great for writers and language learners.",
+      "features": [
+        "Concept description",
+        "word suggestions",
+        "definitions",
+        "etymology",
+        "usage examples"
+      ],
+      "category": "Education",
+      "id": "idea_1760568995968_10_cw0rikuye",
+      "generatedAt": "2025-10-15T22:56:35.968Z"
+    },
+    {
+      "name": "Motivational Roaster",
+      "description": "Like a motivational speaker, but with tough love. R1 calls you out on excuses and pushes you forward with humor and intensity.",
+      "features": [
+        "Personalized roasts",
+        "goal tracking",
+        "excuse detection",
+        "intensity levels",
+        "humor modes"
+      ],
+      "category": "Productivity",
+      "id": "idea_1760568995968_11_yna76nurp",
+      "generatedAt": "2025-10-15T22:56:35.968Z"
+    },
+    {
+      "name": "White Noise Sculptor",
+      "description": "Create precisely tailored white/brown/pink noise with specific frequency cutoffs for your perfect focus or sleep sound.",
+      "features": [
+        "Frequency control",
+        "noise color mixing",
+        "save profiles",
+        "timer",
+        "fade in/out"
+      ],
+      "category": "Wellness",
+      "id": "idea_1760568995968_12_a8gjytemw",
+      "generatedAt": "2025-10-15T22:56:35.968Z"
+    },
+    {
+      "name": "Gratitude Roulette",
+      "description": "Spin a virtual wheel that lands on random life categories (health, relationships, nature, etc.), and R1 helps you articulate specific gratitude.",
+      "features": [
+        "Random categories",
+        "guided reflection",
+        "daily practice",
+        "gratitude journal",
+        "voice input"
+      ],
+      "category": "Wellness",
+      "id": "idea_1760568995968_13_asn52v6vy",
+      "generatedAt": "2025-10-15T22:56:35.968Z"
+    },
+    {
+      "name": "Jargon Buster",
+      "description": "Recording a meeting or lecture? R1 listens for technical jargon and whispers plain-English definitions in real-time.",
+      "features": [
+        "Real-time jargon detection",
+        "context-aware definitions",
+        "customizable fields",
+        "save terms"
+      ],
+      "category": "Education",
+      "id": "idea_1760568995968_14_zs37mrc89",
+      "generatedAt": "2025-10-15T22:56:35.968Z"
+    },
+    {
+      "name": "Historical Twin",
+      "description": "Input your birth date and location, and R1 finds historical figures born the same day/month and tells their stories.",
+      "features": [
+        "Historical database",
+        "birth date matching",
+        "biography summaries",
+        "fun facts"
+      ],
+      "category": "Entertainment",
+      "id": "idea_1760568995968_15_mbnu64n7j",
+      "generatedAt": "2025-10-15T22:56:35.968Z"
+    },
+    {
+      "name": "Shower Thought Logger",
+      "description": "Waterproof-friendly voice recorder specifically for capturing random brilliant ideas. Organizes them by category automatically.",
+      "features": [
+        "Voice capture",
+        "auto-categorization",
+        "idea organization",
+        "reminder system",
+        "export function"
+      ],
+      "category": "Productivity",
+      "id": "idea_1760568995968_16_ohgsmjl5r",
+      "generatedAt": "2025-10-15T22:56:35.968Z"
+    },
+    {
+      "name": "Book Matchmaker",
+      "description": "Describe your mood, current life situation, or what you want to feel, and R1 recommends specific books with reasoning.",
+      "features": [
+        "Mood-based recommendations",
+        "book database",
+        "genre mixing",
+        "reading list management"
+      ],
+      "category": "Lifestyle",
+      "id": "idea_1760568995968_17_80qmv7e19",
+      "generatedAt": "2025-10-15T22:56:35.968Z"
+    },
+    {
+      "name": "Argument Settler",
+      "description": "Two people disagree? Each states their case, and R1 analyzes both arguments objectively and declares a winner with reasoning.",
+      "features": [
+        "Multi-speaker input",
+        "logical analysis",
+        "bias detection",
+        "verdict explanation",
+        "fun referee mode"
+      ],
+      "category": "Entertainment",
+      "id": "idea_1760568995968_18_qrfap4fzg",
+      "generatedAt": "2025-10-15T22:56:35.968Z"
+    },
+    {
+      "name": "Energy Forecaster",
+      "description": "Track your energy levels throughout the day with voice check-ins, and R1 predicts your energy patterns to optimize scheduling.",
+      "features": [
+        "Energy logging",
+        "pattern recognition",
+        "schedule optimization",
+        "circadian rhythm insights"
+      ],
+      "category": "Productivity",
+      "id": "idea_1760568995968_19_8llfhmtgp",
+      "generatedAt": "2025-10-15T22:56:35.968Z"
+    },
+    {
+      "name": "Decision Eliminator",
+      "description": "Can't decide between options? Feed R1 your choices, and it asks increasingly absurd tiebreaker questions until one option clearly wins.",
+      "features": [
+        "Multi-option input",
+        "tiebreaker questions",
+        "humorous logic",
+        "decision history",
+        "share results"
+      ],
+      "category": "Utility",
+      "id": "idea_1760569250628_0_c6f70rf7h",
+      "generatedAt": "2025-10-15T23:00:50.628Z"
+    },
+    {
+      "name": "Lyric Guesser",
+      "description": "Hum or sing a melody, and R1 identifies the song and displays lyrics. Also works in reverse—speak lyrics to find the song!",
+      "features": [
+        "Melody recognition",
+        "lyric search",
+        "song database",
+        "karaoke mode",
+        "music discovery"
+      ],
+      "category": "Entertainment",
+      "id": "idea_1760569250628_1_yvecdg8am",
+      "generatedAt": "2025-10-15T23:00:50.628Z"
+    },
+    {
+      "name": "Procrastination Buster",
+      "description": "When you say you'll do something 'later,' R1 asks increasingly pointed questions about why not now, with humor and psychology.",
+      "features": [
+        "Excuse detection",
+        "psychological prompts",
+        "immediate action challenges",
+        "streak tracking"
+      ],
+      "category": "Productivity",
+      "id": "idea_1760569250628_2_64fqq7gj0",
+      "generatedAt": "2025-10-15T23:00:50.628Z"
+    },
+    {
+      "name": "Vintage Photo Filter",
+      "description": "Point camera at any scene, and R1 describes what it would look like as a specific era of photography (daguerreotype, Polaroid, film noir, etc.).",
+      "features": [
+        "Camera input",
+        "era descriptions",
+        "photography history",
+        "aesthetic analysis",
+        "style suggestions"
+      ],
+      "category": "Creative Tools",
+      "id": "idea_1760569250628_3_hpo4mkfja",
+      "generatedAt": "2025-10-15T23:00:50.628Z"
+    },
+    {
+      "name": "Synonym Avalanche",
+      "description": "Say any word, and R1 generates an increasingly ridiculous chain of synonyms, eventually ending in something hilariously unrelated.",
+      "features": [
+        "Synonym chains",
+        "humor escalation",
+        "word relationships",
+        "language learning",
+        "save chains"
+      ],
+      "category": "Entertainment",
+      "id": "idea_1760569250628_4_b3qqc140q",
+      "generatedAt": "2025-10-15T23:00:50.628Z"
+    },
+    {
+      "name": "Pocket Philosopher",
+      "description": "Ask R1 any life question, and it responds in the style of famous philosophers (Socrates, Nietzsche, Confucius, etc.).",
+      "features": [
+        "Philosopher database",
+        "question analysis",
+        "style matching",
+        "philosophical schools",
+        "quotable wisdom"
+      ],
+      "category": "Education",
+      "id": "idea_1760569250628_5_04xousow9",
+      "generatedAt": "2025-10-15T23:00:50.628Z"
+    },
+    {
+      "name": "Background Music Composer",
+      "description": "Based on your activity (working, cooking, exercising), R1 generates real-time lo-fi background music that adapts to your pace.",
+      "features": [
+        "Activity detection",
+        "adaptive tempo",
+        "genre selection",
+        "mood matching",
+        "generative audio"
+      ],
+      "category": "Entertainment",
+      "id": "idea_1760569250628_6_msov7lzbh",
+      "generatedAt": "2025-10-15T23:00:50.628Z"
+    },
+    {
+      "name": "Skill Randomizer",
+      "description": "Feeling bored? R1 picks a random micro-skill you can learn in 5-10 minutes and teaches you (origami fold, magic trick, phrase in language, etc.).",
+      "features": [
+        "Skill database",
+        "difficulty levels",
+        "step-by-step teaching",
+        "achievement tracking",
+        "skill collection"
+      ],
+      "category": "Education",
+      "id": "idea_1760569250628_7_tzovwpwdk",
+      "generatedAt": "2025-10-15T23:00:50.628Z"
+    },
+    {
+      "name": "Texture Describer",
+      "description": "Touch any surface with R1, and it poetically describes the texture in vivid sensory language perfect for creative writing.",
+      "features": [
+        "Texture analysis",
+        "sensory vocabulary",
+        "metaphor generation",
+        "writer's database",
+        "save descriptions"
+      ],
+      "category": "Creative Tools",
+      "id": "idea_1760569250628_8_7xmhd828q",
+      "generatedAt": "2025-10-15T23:00:50.628Z"
+    },
+    {
+      "name": "Meeting Bullshit Detector",
+      "description": "Listens to meetings and identifies corporate jargon, buzzwords, and empty phrases with a 'BS score' and translation.",
+      "features": [
+        "Real-time jargon tracking",
+        "BS scoring",
+        "buzzword bingo",
+        "translation mode",
+        "funny alerts"
+      ],
+      "category": "Productivity",
+      "id": "idea_1760569250628_9_dj6u1s3cy",
+      "generatedAt": "2025-10-15T23:00:50.628Z"
+    },
+    {
+      "name": "One Sentence Poet",
+      "description": "Point camera at anything, and R1 generates a single perfect sentence of poetry capturing that moment.",
+      "features": [
+        "Camera input",
+        "poetic generation",
+        "style selection",
+        "save poems",
+        "share function"
+      ],
+      "category": "Creative Tools",
+      "id": "idea_1760569250628_10_66w5i049j",
+      "generatedAt": "2025-10-15T23:00:50.628Z"
+    },
+    {
+      "name": "Parallel Universe You",
+      "description": "Input a decision you made, and R1 creates a 'sliding doors' narrative about what your life might be like if you chose differently.",
+      "features": [
+        "Decision input",
+        "narrative generation",
+        "butterfly effect chains",
+        "multiple timelines",
+        "philosophical insights"
+      ],
+      "category": "Entertainment",
+      "id": "idea_1760569250628_11_namgf7tp2",
+      "generatedAt": "2025-10-15T23:00:50.628Z"
+    },
+    {
+      "name": "Voice Pitch Trainer",
+      "description": "Practice speaking at different pitch levels for voice training, presentations, or acting with real-time feedback and targets.",
+      "features": [
+        "Pitch detection",
+        "target ranges",
+        "exercise library",
+        "progress tracking",
+        "voice health tips"
+      ],
+      "category": "Education",
+      "id": "idea_1760569250628_12_mf8ozheyp",
+      "generatedAt": "2025-10-15T23:00:50.628Z"
+    },
+    {
+      "name": "Conversation Saver",
+      "description": "Awkward silence? R1 generates contextually relevant conversation starters or interesting facts based on your location/situation.",
+      "features": [
+        "Context awareness",
+        "topic generation",
+        "ice breakers",
+        "fun facts",
+        "social situation detection"
+      ],
+      "category": "Utility",
+      "id": "idea_1760569250628_13_qb3y49jc0",
+      "generatedAt": "2025-10-15T23:00:50.628Z"
+    },
+    {
+      "name": "Mini Golf Tracker",
+      "description": "Score keeper for mini golf with voice input. 'Hole 3, par 2, got a 4' and R1 tracks everyone's scores with commentary.",
+      "features": [
+        "Voice scoring",
+        "multi-player tracking",
+        "statistics",
+        "funny commentary",
+        "course memory"
+      ],
+      "category": "Recreation",
+      "id": "idea_1760569250628_14_0eei2zyb6",
+      "generatedAt": "2025-10-15T23:00:50.628Z"
+    },
+    {
+      "name": "Etymology Explorer",
+      "description": "Say any word, and R1 traces its origins through history, showing how it evolved and changed meaning over centuries.",
+      "features": [
+        "Word origins",
+        "language families",
+        "historical evolution",
+        "related words",
+        "pronunciation history"
+      ],
+      "category": "Education",
+      "id": "idea_1760569250628_15_728squb06",
+      "generatedAt": "2025-10-15T23:00:50.628Z"
+    },
+    {
+      "name": "Packing List Generator",
+      "description": "Tell R1 where you're going and for how long, and it creates a comprehensive packing list with weather-based recommendations.",
+      "features": [
+        "Destination input",
+        "weather integration",
+        "activity-based suggestions",
+        "customizable lists",
+        "share function"
+      ],
+      "category": "Travel",
+      "id": "idea_1760569250628_16_8hlgpie18",
+      "generatedAt": "2025-10-15T23:00:50.628Z"
+    },
+    {
+      "name": "Micro Fiction Generator",
+      "description": "R1 generates complete micro-stories (50-100 words) in various genres based on a single word prompt you provide.",
+      "features": [
+        "Genre selection",
+        "prompt input",
+        "story generation",
+        "save favorites",
+        "writing prompts"
+      ],
+      "category": "Entertainment",
+      "id": "idea_1760569250628_17_h9e87a7v3",
+      "generatedAt": "2025-10-15T23:00:50.628Z"
+    },
+    {
+      "name": "Body Language Coach",
+      "description": "Describe how you're sitting/standing, and R1 analyzes what it projects and suggests adjustments for confidence, approachability, etc.",
+      "features": [
+        "Posture analysis",
+        "projection feedback",
+        "situation-based advice",
+        "confidence building",
+        "reminder system"
+      ],
+      "category": "Self-Improvement",
+      "id": "idea_1760569250628_18_w4usqh2pb",
+      "generatedAt": "2025-10-15T23:00:50.628Z"
+    },
+    {
+      "name": "Rain Forecast Poet",
+      "description": "Instead of boring weather data, R1 tells you rain forecasts as beautiful poetic descriptions: 'Silver needles dance at 3pm...'",
+      "features": [
+        "Weather API",
+        "poetic generation",
+        "location-based",
+        "notification option",
+        "mood matching"
+      ],
+      "category": "Utility",
+      "id": "idea_1760569250628_19_lbf3rlfj0",
+      "generatedAt": "2025-10-15T23:00:50.628Z"
+    }
+  ],
+  "repoCache": null
+}

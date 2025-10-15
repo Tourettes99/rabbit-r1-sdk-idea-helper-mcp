@@ -1,0 +1,17 @@
+{
+  "name": "rabbit-r1-ideas-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for generating creative Rabbit R1 creation app ideas with memory",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.5.0",
+    "node-fetch": "^3.3.2"
+  },
+  "author": "",
+  "license": "MIT"
+}
+
