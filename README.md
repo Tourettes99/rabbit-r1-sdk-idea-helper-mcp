@@ -93,6 +93,76 @@ See Cursor’s skill layout in [Creating Skills in Cursor](https://cursor.com/do
 - `rabbit://ideas/stats` — counts and cache timestamps.
 - `rabbit://sdk/knowledge-index` — last cached unified index (if any).
 
+## FAQ
+
+### What does this MCP do?
+
+It runs as a **stdio** MCP server in Cursor (and similar clients). It (1) helps generate and **remember** Rabbit R1 **Creations** app ideas using live context from the **official** [creations-sdk](https://github.com/rabbit-hmi-oss/creations-sdk) repo, and (2) exposes **`get_rabbit_sdk_knowledge_index`**, which pulls **official GitHub + npm `r1-create`** in **one** call so the agent does not need many separate lookups.
+
+### What are the requirements?
+
+**Node.js 18+** (for global `fetch`). No API keys are required for this server; it only calls public GitHub and npm/unpkg endpoints.
+
+### How do I add it to Cursor?
+
+Put an entry in **`~/.cursor/mcp.json`** (macOS/Linux) or **`%USERPROFILE%\.cursor\mcp.json`** (Windows) with `"command": "node"` and **`args`** set to the **absolute path** to `rabbit-ideas-mcp/index.js`. Paths with spaces are fine inside the JSON string. **Restart Cursor** (or reload MCP) after changing `mcp.json`.
+
+### Will it work for other people if I put the repo on GitHub?
+
+Yes. They clone, run **`npm install`** in `rabbit-ideas-mcp`, and point **their** `mcp.json` at **their** machine’s path to `index.js`. **`mcp.json`**, **`rabbit-ideas-storage.json`**, and **`~/.cursor/skills/...`** are per user and are not shared by the repo alone (storage is gitignored).
+
+### Why two SDKs (official vs `r1-create`)?
+
+**Official** `creations-sdk` is the canonical GitHub repo (plugin-demo, QR flow, short README). **`r1-create`** is a **community** npm package with a richer TS/API surface (hardware, LLM helpers, UI, etc.). The index tool returns **both** plus **`recommendation`** hints; the agent still follows **your** task and skills.
+
+### Which tool should the agent call first for SDK work?
+
+**`get_rabbit_sdk_knowledge_index`**. Use **`refreshCache: true`** when you want to bypass the server-side cache and refetch everything. Use **`maxReadmeChars`** if you need longer or shorter README excerpts in the payload.
+
+### Where is data stored?
+
+Next to the server: **`rabbit-ideas-mcp/rabbit-ideas-storage.json`** — suggested ideas, optional repo snapshot, and **`sdkIndexCache`** for the unified index. That file is **gitignored** so personal ideas and cache are not pushed to GitHub.
+
+### How long is the SDK index cached?
+
+Default **24 hours** (`86400000` ms). Override with env **`RABBIT_MCP_SDK_CACHE_TTL_MS`** (milliseconds).
+
+### Why bootstrap personal skills (`npm run bootstrap-skills`)?
+
+So **`~/.cursor/skills/rabbit-creations-official/SKILL.md`** and **`r1-create-community/SKILL.md`** exist before the first run. That avoids agents inventing patterns from **unrelated** open projects (e.g. another Creations app in the workspace). **`npm run bootstrap-skills -- --force`** overwrites those stubs; re-merge anything you need from a fresh MCP index afterward.
+
+### Can I skip bootstrap?
+
+Yes. After **`get_rabbit_sdk_knowledge_index`**, the agent can **create** the two skill files from the payload (`skillGuidance`, README fields). Bootstrap is just the repeatable, clone-friendly shortcut.
+
+### Do SDK skills live in this git repo?
+
+**No.** Keep them under **`~/.cursor/skills/`** (personal skills). This repo only ships **`bootstrap-skills.mjs`** to generate the same stubs locally.
+
+### Why must ideas be saved with `save_generated_ideas`?
+
+So the server can enforce **non-repetition** across sessions. After the model generates ideas, it should call **`save_generated_ideas`** with the array. **`clear_idea_history`** with **`confirm: true`** resets the list.
+
+### What is `sdkTarget` on `generate_rabbit_creation_ideas`?
+
+**`auto`** (default), **`official_creations_sdk`**, **`r1_create`**, or **`both`** — steers the **hint text** in the context the tool returns; it does not switch which remote servers are called for that tool alone (full dual-SDK pull is **`get_rabbit_sdk_knowledge_index`**).
+
+### The MCP tools do not show up in Cursor
+
+Confirm **`mcp.json`** syntax, that **`node`** runs in a terminal, and the **`index.js`** path is correct. **Restart Cursor** fully. On Windows, use the full path to **`node.exe`** in `"command"` only if Cursor’s environment does not see `node` on `PATH`.
+
+### GitHub returns little or no README text
+
+The official **creations-sdk** README can be **short** by design; the server still returns **file tree** and **commits**. For long API docs use **`r1-create`**’s README in the same index payload. Unauthenticated GitHub can hit **rate limits**; if that happens, try again later or reduce parallel traffic from the same IP.
+
+### Is `r1-create` official Rabbit?
+
+**No.** It is a **community** npm package ([npm](https://www.npmjs.com/package/r1-create), [Boondit overview](https://boondit.site/r1-create)). This MCP only **reads public** package metadata and README text; it does not endorse or bundle that SDK.
+
+### What about `npm audit` reporting vulnerabilities?
+
+They usually come from **`@modelcontextprotocol/sdk`** or transitive dependencies. Fixing may require a major SDK bump; treat as normal Node dependency hygiene, not specific to Rabbit product logic.
+
 ## License
 
 MIT — see [LICENSE](LICENSE).
