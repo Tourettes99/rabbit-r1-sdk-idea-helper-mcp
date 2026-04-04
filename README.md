@@ -1,86 +1,83 @@
-# Rabbit R1 Ideas MCP Server
+# Rabbit R1 Ideas MCP
 
-An MCP (Model Context Protocol) server that helps generate creative and unique Rabbit R1 creation app ideas while maintaining memory of previously suggested ideas to avoid repetition.
+[MCP](https://modelcontextprotocol.io) server that:
 
-## Features
+- Generates and remembers **Rabbit R1 Creations** app ideas (backed by the official [creations-sdk](https://github.com/rabbit-hmi-oss/creations-sdk) repo on GitHub).
+- Pulls a **single-shot knowledge index** of **two** SDK paths in one tool call: official Creations SDK + community **[r1-create](https://www.npmjs.com/package/r1-create)** (README from [unpkg](https://unpkg.com/r1-create@latest/README.md), metadata from the npm registry). Community overview: [Boondit R1 Create SDK](https://boondit.site/r1-create).
 
-- **Intelligent Idea Generation**: Generates 20 unique app ideas per request based on the current Rabbit R1 Creations SDK
-- **Memory System**: Remembers all previously suggested ideas to ensure no repetition
-- **GitHub Integration**: Monitors the [creations-sdk repository](https://github.com/rabbit-hmi-oss/creations-sdk) for latest features and changes
-- **Idea Retrieval**: Access previously suggested ideas for review and iteration
-- **Idea Iteration**: Take existing ideas and create variations or improvements
-- **Repository Status**: Get real-time information about the SDK structure and recent updates
+**Node.js 18+** required (global `fetch`).
 
-## Tools Available
+## Install
 
-### 1. `generate_rabbit_creation_ideas`
-Generates 20 creative and unique Rabbit R1 creation app ideas.
+### macOS / Linux
 
-**Parameters:**
-- `focusArea` (optional): Focus on specific category like "productivity", "entertainment", "utilities", etc.
+```bash
+cd rabbit-ideas-mcp
+chmod +x install.sh
+./install.sh
+```
 
-### 2. `get_previous_ideas`
-Retrieves previously suggested ideas.
+### Windows (PowerShell)
 
-**Parameters:**
-- `limit` (optional): Number of ideas to retrieve
-- `search` (optional): Search term to filter ideas
+```powershell
+cd rabbit-ideas-mcp
+npm install
+```
 
-### 3. `iterate_on_idea`
-Creates variations or improvements on a previous idea.
+Optional: use `install.ps1` if you rely on the Windows startup shortcut workflow (Cursor still spawns the server via `mcp.json`).
 
-**Parameters:**
-- `ideaIndex` (required): Index number of the idea to iterate on
-- `iterationDirection` (optional): "expand", "simplify", "combine", or "pivot"
+## Cursor MCP configuration
 
-### 4. `get_repo_status`
-Fetches current status of the Rabbit R1 Creations SDK repository.
+Add to `~/.cursor/mcp.json` (macOS/Linux) or `%USERPROFILE%\.cursor\mcp.json` (Windows). Use the **absolute path** to `index.js` on your machine:
 
-### 5. `save_generated_ideas`
-Saves newly generated ideas to persistent storage. **MUST** be called after generating ideas.
+```json
+{
+  "mcpServers": {
+    "rabbit-r1-ideas": {
+      "command": "node",
+      "args": ["/absolute/path/to/rabbit-ideas-mcp/index.js"]
+    }
+  }
+}
+```
 
-**Parameters:**
-- `ideas` (required): Array of idea objects with name, description, features, category
+## Tools
 
-### 6. `clear_idea_history`
-Clears all previously suggested ideas (use with caution).
+| Tool | Purpose |
+|------|---------|
+| **`get_rabbit_sdk_knowledge_index`** | **Call this first** when you need both SDKs. Parallel fetch: official GitHub repo (README, tree, commits) + `r1-create` (npm + README). Returns comparison hints, keyword index, links, and **where to store personal Cursor skills** (`~/.cursor/skills/...`). Optional: `refreshCache`, `maxReadmeChars`. |
+| `generate_rabbit_creation_ideas` | Context for 20 ideas; optional `sdkTarget`: `auto` \| `official_creations_sdk` \| `r1_create` \| `both`. |
+| `get_previous_ideas` | List / search stored ideas. |
+| `iterate_on_idea` | Iterate on a stored idea by index. |
+| `get_repo_status` | Official GitHub repo snapshot only. |
+| `save_generated_ideas` | Persist generated ideas. |
+| `clear_idea_history` | Reset stored ideas (`confirm: true`). |
 
-**Parameters:**
-- `confirm` (required): Must be `true` to confirm
+## Personal skills (not in this repo)
+
+SDK knowledge should live in **personal** Cursor skills so it is not committed to application codebases:
+
+- `~/.cursor/skills/rabbit-creations-official/SKILL.md` — official Creations SDK / GitHub workflow.
+- `~/.cursor/skills/r1-create-community/SKILL.md` — npm `r1-create` APIs and patterns.
+
+After calling `get_rabbit_sdk_knowledge_index`, the agent should **merge only new facts** into those files (append / dated changelog). Each skill should state explicitly: **do not web-search** for SDK API details when the skill + MCP already cover them; refresh via this tool instead.
+
+See Cursor’s skill layout in [Creating Skills in Cursor](https://cursor.com/docs) (personal vs project skills).
+
+## Environment
+
+| Variable | Meaning |
+|----------|---------|
+| `RABBIT_MCP_SDK_CACHE_TTL_MS` | TTL for cached unified index in `rabbit-ideas-storage.json` (default `86400000` ms). |
 
 ## Resources
 
-- `rabbit://ideas/storage` - View all stored ideas and cache
-- `rabbit://ideas/stats` - View statistics about generated ideas
-
-## Installation
-
-See the parent directory for installation and startup scripts.
-
-## Storage
-
-Ideas are stored in `rabbit-ideas-storage.json` which maintains:
-- All suggested ideas with timestamps and unique IDs
-- GitHub repository cache
-- Last check timestamps
-
-## How It Works
-
-1. When you ask for ideas, the server fetches the latest information from the Rabbit R1 Creations SDK GitHub repo
-2. It analyzes the current structure, features, and recent changes
-3. The LLM generates 20 unique ideas that haven't been suggested before
-4. The LLM calls `save_generated_ideas` to save them to persistent storage
-5. Future requests check against stored ideas to ensure uniqueness
-
-## Example Usage
-
-In Cursor with MCP:
-- "Give me 20 creative Rabbit R1 app ideas"
-- "Show me previous ideas related to health"
-- "Iterate on idea #5 and expand it"
-- "What's the current status of the Rabbit SDK?"
+- `rabbit://ideas/storage` — full JSON storage.
+- `rabbit://ideas/stats` — counts and cache timestamps.
+- `rabbit://sdk/knowledge-index` — last cached unified index (if any).
 
 ## License
 
-MIT
+MIT — see [LICENSE](LICENSE).
 
+`r1-create` is a separate project (Apache-2.0 on npm); this MCP only fetches public metadata and README text.

@@ -1,0 +1,8 @@
+node_modules/
+*.log
+.DS_Store
+.env
+.env.*
+
+# Local MCP state (ideas + SDK cache); do not publish personal data
+rabbit-ideas-mcp/rabbit-ideas-storage.json

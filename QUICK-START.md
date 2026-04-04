@@ -4,9 +4,13 @@
 
 Your Rabbit R1 Ideas MCP Server has been successfully installed and configured!
 
+## Cross-platform
+
+Use **root [README](README.md)** for macOS/Linux paths and `install.sh`. This file still uses Windows paths as examples.
+
 ## ✅ What Was Set Up
 
-1. **MCP Server**: Installed at `C:\Users\isman\Documents\rabbit r1 sdk mcp\rabbit-ideas-mcp\`
+1. **MCP Server**: Installed under `rabbit-ideas-mcp/` in your clone
 2. **Dependencies**: All npm packages installed
 3. **Storage**: Ideas database created at `rabbit-ideas-storage.json`
 4. **Auto-Start**: Configured to run on Windows startup

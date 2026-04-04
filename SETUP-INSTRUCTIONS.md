@@ -6,20 +6,31 @@ This MCP server enhances your AI assistant with the ability to:
 - Generate 20 unique Rabbit R1 creation app ideas per request
 - Never repeat previously suggested ideas (they're saved to memory)
 - Monitor the [Rabbit R1 Creations SDK](https://github.com/rabbit-hmi-oss/creations-sdk.git) for latest features
+- Fetch a **unified index** of official GitHub + npm [`r1-create`](https://www.npmjs.com/package/r1-create) in one MCP call (`get_rabbit_sdk_knowledge_index`)
 - Help you iterate and improve on previous ideas
 - Retrieve and search through previously suggested ideas
 
 ## Installation Steps
 
-### 1. Run the Installer
+### macOS / Linux
+
+```bash
+cd rabbit-ideas-mcp
+chmod +x install.sh
+./install.sh
+```
+
+Add the server to `~/.cursor/mcp.json` (see root [README](README.md)).
+
+### Windows
 
 **Option A: Double-click the batch file**
-- Navigate to: `C:\Users\isman\Documents\rabbit r1 sdk mcp\rabbit-ideas-mcp\`
+- Navigate to the `rabbit-ideas-mcp` folder
 - Double-click: `install.bat`
 
 **Option B: Run from PowerShell**
 ```powershell
-cd "C:\Users\isman\Documents\rabbit r1 sdk mcp\rabbit-ideas-mcp"
+cd "path\to\rabbit-ideas-mcp"
 .\install.ps1
 ```
 
@@ -83,11 +94,11 @@ Once installed, you can ask your AI assistant:
 
 ## File Locations
 
-- **MCP Server**: `C:\Users\isman\Documents\rabbit r1 sdk mcp\rabbit-ideas-mcp\`
-- **Configuration**: `C:\Users\isman\.cursor\mcp.json`
-- **Ideas Storage**: `rabbit-ideas-storage.json` (in MCP server directory)
-- **Startup Link**: `%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\RabbitR1Ideas.lnk`
-- **Logs**: `startup.log` (in MCP server directory)
+- **MCP Server**: your clone of `rabbit-ideas-mcp/`
+- **Cursor MCP config**: `~/.cursor/mcp.json` (macOS/Linux) or `%USERPROFILE%\.cursor\mcp.json` (Windows)
+- **Ideas + SDK cache**: `rabbit-ideas-storage.json` (in MCP server directory; gitignored by default)
+- **Windows only — Startup Link**: `%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\RabbitR1Ideas.lnk`
+- **Logs**: `startup.log` (in MCP server directory, Windows optional flow)
 
 ## Troubleshooting
 
