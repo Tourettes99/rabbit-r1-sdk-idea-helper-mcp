@@ -7,6 +7,21 @@
 
 **Node.js 18+** required (global `fetch`).
 
+## Personal skills bootstrap (recommended once per machine)
+
+So agents never treat “missing skill paths” as a reason to copy **other** repos (e.g. meshy-print-r1), either:
+
+- **Run the stub generator** (same result on every clone):
+
+```bash
+cd rabbit-ideas-mcp
+npm run bootstrap-skills
+```
+
+Use `npm run bootstrap-skills -- --force` to overwrite stubs. Then let the agent merge MCP index deltas into each `SKILL.md`.
+
+- **Or skip bootstrap** and rely on the agent: after **`get_rabbit_sdk_knowledge_index`**, the agent can **create** `~/.cursor/skills/rabbit-creations-official/SKILL.md` and `r1-create-community/SKILL.md` from the MCP payload (`officialCreationsSdk`, `r1Create`, `skillGuidance`). The MCP response tells it to do that when files are missing.
+
 ## Install
 
 ### macOS / Linux
@@ -59,6 +74,8 @@ SDK knowledge should live in **personal** Cursor skills so it is not committed t
 
 - `~/.cursor/skills/rabbit-creations-official/SKILL.md` — official Creations SDK / GitHub workflow.
 - `~/.cursor/skills/r1-create-community/SKILL.md` — npm `r1-create` APIs and patterns.
+
+**Creating those files:** use **`npm run bootstrap-skills`** once, **or** rely on the agent to create them from the **`get_rabbit_sdk_knowledge_index`** payload when they do not exist yet.
 
 After calling `get_rabbit_sdk_knowledge_index`, the agent should **merge only new facts** into those files (append / dated changelog). Each skill should state explicitly: **do not web-search** for SDK API details when the skill + MCP already cover them; refresh via this tool instead.
 

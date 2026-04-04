@@ -15,6 +15,9 @@ echo "Node: $(node --version)"
 echo "Installing dependencies..."
 npm install
 
+echo "Optional: npm run bootstrap-skills  (creates ~/.cursor/skills rabbit SDK stubs)"
+npm run bootstrap-skills 2>/dev/null || true
+
 STORAGE="rabbit-ideas-storage.json"
 if [[ ! -f "$STORAGE" ]]; then
   printf '%s\n' '{"suggestedIdeas":[],"repoCache":null,"lastChecked":null,"sdkIndexCache":null}' > "$STORAGE"

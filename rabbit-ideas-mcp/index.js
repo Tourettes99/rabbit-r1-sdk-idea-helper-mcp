@@ -49,7 +49,8 @@ function mandatorySkillRulesBlock() {
 - **Source of truth**: Treat the feature list and API notes in *this* SKILL.md as authoritative for that SDK.
 - **No web search for API surface**: Do **not** use web search to discover or verify Rabbit SDK options, methods, or capabilities while building. If something is missing here, call the MCP tool \`get_rabbit_sdk_knowledge_index\` once, then **append only the delta** to this file.
 - **Prefer MCP over guessing**: Use \`get_rabbit_sdk_knowledge_index\` for a single-shot refresh of **both** SDKs (official creations-sdk GitHub + npm \`r1-create\`).
-- **Update discipline**: Update this skill **only** when new facts are required beyond what is already recorded—merge additive sections, do not replace working knowledge without reason.`;
+- **Update discipline**: Update this skill **only** when new facts are required beyond what is already recorded—merge additive sections, do not replace working knowledge without reason.
+- **No cross-repo substitution**: Do **not** treat another repository’s Creations code (e.g. meshy-print-r1: \`creationStorage\`, \`CreationVoiceHandler\`, \`sttEnded\`, etc.) as the SDK spec unless the user explicitly asked to follow that project. Official vs r1-create facts come from **this skill + MCP**, not from whatever happens to be open in the workspace.`;
 }
 
 function buildRecommendation({ official, r1Create }) {
@@ -283,6 +284,11 @@ async function buildUnifiedKnowledgeIndex({ maxReadmeChars }) {
     storage: 'Personal skills only — do not commit SDK skills into app repositories.',
     paths: skillPathsHint(),
     mandatoryRulesMarkdown: mandatorySkillRulesBlock(),
+    firstRunBehavior: [
+      'It is normal if ~/.cursor/skills/rabbit-creations-official/SKILL.md or r1-create-community/SKILL.md did not exist before: create those directories and files immediately using this response (copy officialCreationsSdk.readme + r1Create.readme excerpts into the right skill).',
+      'Do NOT say you are "following meshy-print-r1" or any other open project as a substitute for these SDKs unless the user named that project.',
+      'Repo ships bootstrap-skills.mjs: run `node rabbit-ideas-mcp/bootstrap-skills.mjs` once per machine to create the two SKILL.md stubs.',
+    ],
     howToUpdate:
       'When npm or GitHub adds new APIs, call get_rabbit_sdk_knowledge_index(refreshCache:true), diff against your SKILL.md, append a dated "Changelog (agent)" section with only new facts.',
     suggestedSkillNames: {
@@ -328,7 +334,7 @@ function sdkCacheValid(cache) {
 const server = new Server(
   {
     name: 'rabbit-r1-ideas-mcp',
-    version: '2.0.0',
+    version: '2.0.1',
   },
   {
     capabilities: {
@@ -344,7 +350,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       {
         name: 'get_rabbit_sdk_knowledge_index',
         description:
-          '**Single-shot knowledge pull (use this first).** Fetches in parallel: official Rabbit Creations SDK (GitHub: rabbit-hmi-oss/creations-sdk) and community r1-create (npm README + package metadata). Returns comparison, keyword index, links, and instructions to maintain **two separate personal Cursor skills** under ~/.cursor/skills (never commit skills into project repos). Agents must **not** web-search SDK API details when this tool or those skills already cover them; refresh knowledge only via this tool and merge deltas into SKILL.md.',
+          '**Single-shot knowledge pull (use this first).** Fetches in parallel: official Rabbit Creations SDK (GitHub: rabbit-hmi-oss/creations-sdk) and community r1-create (npm README + package metadata). Returns comparison, keyword index, links, and **skillGuidance**. If the two personal skill files under ~/.cursor/skills are missing, **create them from this payload** (or run `node bootstrap-skills.mjs` in rabbit-ideas-mcp)—do **not** fall back to unrelated workspace repos as SDK authority. Agents must **not** web-search SDK API details when this tool or those skills cover them; merge deltas into SKILL.md only.',
         inputSchema: {
           type: 'object',
           properties: {

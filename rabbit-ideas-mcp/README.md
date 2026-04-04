@@ -18,7 +18,7 @@ Fetches **both** sources in parallel. Returns:
 - Version, keywords, description (`r1-create`).
 - **Keyword index** for quick scanning.
 - **`recommendation`** — hints for when to lean official vs `r1-create`.
-- **`skillGuidance`** — paths under `~/.cursor/skills/` for **personal** skills; includes mandatory “no web search for SDK APIs” rules to paste into each `SKILL.md`.
+- **`skillGuidance`** — paths under `~/.cursor/skills/` for **personal** skills; includes mandatory “no web search for SDK APIs” rules to paste into each `SKILL.md`. If those files are missing, the agent should **create** them from this response (or you can run **`npm run bootstrap-skills`** in this folder instead).
 
 Parameters: `refreshCache` (boolean), `maxReadmeChars` (number).
 
@@ -51,6 +51,8 @@ Maintain two skills in **`~/.cursor/skills/`** only:
 
 - `rabbit-creations-official/SKILL.md`
 - `r1-create-community/SKILL.md`
+
+**How they appear:** run **`npm run bootstrap-skills`** once per machine, **or** have the agent create them after **`get_rabbit_sdk_knowledge_index`** using the payload (see `skillGuidance` + readme fields).
 
 Update them **only** when the MCP index shows new facts; append deltas, do not replace blindly.
 
