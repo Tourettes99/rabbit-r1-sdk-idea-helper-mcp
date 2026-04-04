@@ -1,6 +1,6 @@
 {
   "name": "rabbit-r1-ideas-mcp",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "MCP server: Rabbit R1 creation ideas, official Creations SDK + r1-create npm knowledge index",
   "type": "module",
   "main": "index.js",

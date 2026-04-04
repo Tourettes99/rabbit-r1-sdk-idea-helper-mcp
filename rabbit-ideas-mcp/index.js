@@ -12,6 +12,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import os from 'os';
+import * as docLib from './documentation-library.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,6 +25,8 @@ const UNPKG_README = 'https://unpkg.com/r1-create@latest/README.md';
 const UNPKG_PKG = 'https://unpkg.com/r1-create@latest/package.json';
 const BOONDIT_R1_CREATE_URL = 'https://boondit.site/r1-create';
 const NPM_WEB_R1_CREATE = 'https://www.npmjs.com/package/r1-create';
+const LIBRARY_REPO_DEFAULT = docLib.DEFAULT_LIBRARY_REPO;
+const LIBRARY_MANIFEST_RAW = `https://raw.githubusercontent.com/${LIBRARY_REPO_DEFAULT}/main/library/documentation-sources.json`;
 
 const DEFAULT_SDK_CACHE_TTL_MS = Number(process.env.RABBIT_MCP_SDK_CACHE_TTL_MS || 86_400_000);
 
@@ -162,6 +165,7 @@ async function initStorage() {
       repoCache: null,
       lastChecked: null,
       sdkIndexCache: null,
+      documentationLibrary: { sources: [] },
     };
     await fs.writeFile(IDEAS_STORAGE_FILE, JSON.stringify(initialData, null, 2));
   }
@@ -172,6 +176,17 @@ async function loadStorage() {
     const data = await fs.readFile(IDEAS_STORAGE_FILE, 'utf-8');
     const parsed = JSON.parse(data);
     if (parsed.sdkIndexCache === undefined) parsed.sdkIndexCache = null;
+    if (!parsed.documentationLibrary || !Array.isArray(parsed.documentationLibrary.sources)) {
+      parsed.documentationLibrary = { sources: [] };
+    }
+    const srcLen = parsed.documentationLibrary.sources.length;
+    if (
+      srcLen > 0 &&
+      parsed.sdkIndexCache?.payload &&
+      !Array.isArray(parsed.sdkIndexCache.payload.registeredDocumentation)
+    ) {
+      parsed.sdkIndexCache = null;
+    }
     return parsed;
   } catch {
     return {
@@ -179,6 +194,7 @@ async function loadStorage() {
       repoCache: null,
       lastChecked: null,
       sdkIndexCache: null,
+      documentationLibrary: { sources: [] },
     };
   }
 }
@@ -214,6 +230,68 @@ async function fetchRepoStructure() {
   }
 }
 
+async function fetchRegisteredDocumentation(sources, maxReadmeChars) {
+  if (!sources?.length) return [];
+  return Promise.all(
+    sources.map(async (src) => {
+      try {
+        const { text, contentType } = await docLib.fetchDocUrl(src.url);
+        const normalized = docLib.normalizeFetchedText(text, contentType);
+        return {
+          id: src.id,
+          name: src.name,
+          url: src.url,
+          skillSlug: src.skillSlug,
+          content: truncate(normalized, maxReadmeChars),
+          textLength: normalized.length,
+          error: null,
+        };
+      } catch (e) {
+        return {
+          id: src.id,
+          name: src.name,
+          url: src.url,
+          skillSlug: src.skillSlug,
+          content: '',
+          textLength: 0,
+          error: e.message,
+        };
+      }
+    })
+  );
+}
+
+async function discoverMissingLocalSkills(storage) {
+  const skillsRoot = path.join(os.homedir(), '.cursor', 'skills');
+  const missing = [];
+  const present = [];
+  for (const src of storage.documentationLibrary?.sources || []) {
+    const skillFile = path.join(skillsRoot, src.skillSlug, 'SKILL.md');
+    try {
+      await fs.access(skillFile);
+      present.push({ skillSlug: src.skillSlug, sourceId: src.id, name: src.name });
+    } catch {
+      missing.push({ skillSlug: src.skillSlug, sourceId: src.id, name: src.name, url: src.url });
+    }
+  }
+  return { missing, present, skillsRoot };
+}
+
+async function writeLocalSkillForSource(source, normalizedText) {
+  const snippet = normalizedText.slice(0, 120_000);
+  const body = docLib.buildSkillMarkdownFromDoc({
+    name: source.name,
+    url: source.url,
+    skillSlug: source.skillSlug,
+    bodySnippet: snippet,
+  });
+  const dir = path.join(os.homedir(), '.cursor', 'skills', source.skillSlug);
+  await fs.mkdir(dir, { recursive: true });
+  const skillFile = path.join(dir, 'SKILL.md');
+  await fs.writeFile(skillFile, body, 'utf8');
+  return skillFile;
+}
+
 async function fetchReadme() {
   try {
     const response = await fetch(`${GITHUB_API_URL}/readme`, {
@@ -232,8 +310,12 @@ async function fetchReadme() {
   }
 }
 
-async function buildUnifiedKnowledgeIndex({ maxReadmeChars }) {
-  const [officialRaw, r1CreateRaw] = await Promise.all([fetchOfficialSdkBundle(), fetchR1CreateBundle()]);
+async function buildUnifiedKnowledgeIndex({ maxReadmeChars, documentationSources = [] }) {
+  const [officialRaw, r1CreateRaw, registeredDocumentation] = await Promise.all([
+    fetchOfficialSdkBundle(),
+    fetchR1CreateBundle(),
+    fetchRegisteredDocumentation(documentationSources, maxReadmeChars),
+  ]);
 
   const officialReadme = officialRaw.readme || '';
   const r1Readme = r1CreateRaw.readme || '';
@@ -272,6 +354,7 @@ async function buildUnifiedKnowledgeIndex({ maxReadmeChars }) {
   const featureIndex = {
     officialKeywords: extractKeywords(official.readme + official.filePaths.join('\n')),
     r1CreateKeywords: extractKeywords(r1Create.readme + (r1Create.keywords || []).join(' ')),
+    registeredDocKeywords: extractKeywords(registeredDocumentation.map((d) => d.content).join('\n')),
     note: 'Keyword buckets are shallow token hints for quick scanning; rely on readme bodies for accuracy.',
   };
 
@@ -295,12 +378,25 @@ async function buildUnifiedKnowledgeIndex({ maxReadmeChars }) {
       official: 'rabbit-creations-official',
       r1Create: 'r1-create-community',
     },
+    documentationLibrary: {
+      note:
+        'Registered doc URLs are merged into this index as registeredDocumentation. Each source uses skillSlug under ~/.cursor/skills/{skillSlug}/. Use discover_missing_local_skills, ensure_local_skill_for_registered_source, register_documentation_source, publish_documentation_library_to_github, pull_documentation_library_from_github.',
+      defaultGithubLibraryRepo: LIBRARY_REPO_DEFAULT,
+      manifestRawUrl: LIBRARY_MANIFEST_RAW,
+      tokenEnv: 'Set RABBIT_MCP_GITHUB_TOKEN or GITHUB_TOKEN (repo contents write) to publish to the library repo.',
+    },
   };
 
   return {
     fetchedAt: new Date().toISOString(),
     officialCreationsSdk: official,
     r1Create,
+    registeredDocumentation,
+    documentationLibrarySummary: {
+      sourceCount: documentationSources.length,
+      defaultGithubLibraryRepo: LIBRARY_REPO_DEFAULT,
+      manifestRawUrl: LIBRARY_MANIFEST_RAW,
+    },
     unifiedFeatureIndex: featureIndex,
     recommendation,
     skillGuidance,
@@ -308,6 +404,7 @@ async function buildUnifiedKnowledgeIndex({ maxReadmeChars }) {
       officialRepo: `https://github.com/${GITHUB_REPO}`,
       r1CreateNpm: NPM_WEB_R1_CREATE,
       r1CreateDocsSite: BOONDIT_R1_CREATE_URL,
+      libraryRepo: `https://github.com/${LIBRARY_REPO_DEFAULT}`,
     },
   };
 }
@@ -334,7 +431,7 @@ function sdkCacheValid(cache) {
 const server = new Server(
   {
     name: 'rabbit-r1-ideas-mcp',
-    version: '2.0.1',
+    version: '2.1.0',
   },
   {
     capabilities: {
@@ -350,7 +447,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       {
         name: 'get_rabbit_sdk_knowledge_index',
         description:
-          '**Single-shot knowledge pull (use this first).** Fetches in parallel: official Rabbit Creations SDK (GitHub: rabbit-hmi-oss/creations-sdk) and community r1-create (npm README + package metadata). Returns comparison, keyword index, links, and **skillGuidance**. If the two personal skill files under ~/.cursor/skills are missing, **create them from this payload** (or run `node bootstrap-skills.mjs` in rabbit-ideas-mcp)—do **not** fall back to unrelated workspace repos as SDK authority. Agents must **not** web-search SDK API details when this tool or those skills cover them; merge deltas into SKILL.md only.',
+          '**Single-shot knowledge pull (use this first).** Fetches in parallel: official Creations SDK GitHub, npm r1-create, **and every URL in the local documentation library** (see register_documentation_source). Returns registeredDocumentation, comparison, keyword index, skillGuidance. Personal skills: bootstrap or create from payload; registered sources use ~/.cursor/skills/{skillSlug}/. Do not fall back to unrelated repos as SDK authority. Optional: refreshCache, maxReadmeChars.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -364,6 +461,76 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             },
           },
         },
+      },
+      {
+        name: 'register_documentation_source',
+        description:
+          'Add a documentation URL (http(s)) to the library. It is included in get_rabbit_sdk_knowledge_index on the next fetch. skillSlug defaults from name. Clears SDK index cache. If autoPublishToGithub true, pushes SKILL.md + manifest to Tourettes99/rabbit-r1-sdk-idea-helper-mcp (needs RABBIT_MCP_GITHUB_TOKEN or GITHUB_TOKEN with repo write).',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            name: { type: 'string', description: 'Human-readable label' },
+            url: { type: 'string', description: 'http(s) URL to fetch (HTML or text/markdown)' },
+            skillSlug: { type: 'string', description: 'Optional Cursor skill folder name; slugified if omitted' },
+            autoPublishToGithub: {
+              type: 'boolean',
+              description: 'If true, publish this source + updated manifest to the library GitHub repo',
+            },
+          },
+          required: ['name', 'url'],
+        },
+      },
+      {
+        name: 'list_documentation_sources',
+        description: 'Lists registered documentation library entries (id, name, url, skillSlug, addedAt).',
+        inputSchema: { type: 'object', properties: {} },
+      },
+      {
+        name: 'remove_documentation_source',
+        description: 'Removes a library entry by id. confirm must be true.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            id: { type: 'string' },
+            confirm: { type: 'boolean' },
+          },
+          required: ['id', 'confirm'],
+        },
+      },
+      {
+        name: 'discover_missing_local_skills',
+        description:
+          'Compares registered documentation sources to ~/.cursor/skills/{skillSlug}/SKILL.md. Returns missing vs present so the agent can call ensure_local_skill_for_registered_source.',
+        inputSchema: { type: 'object', properties: {} },
+      },
+      {
+        name: 'ensure_local_skill_for_registered_source',
+        description:
+          'Fetches the source URL, writes ~/.cursor/skills/{skillSlug}/SKILL.md (creates dir). Use for each missing slug after discover_missing_local_skills.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            sourceId: { type: 'string', description: 'id from register_documentation_source or manifest' },
+          },
+          required: ['sourceId'],
+        },
+      },
+      {
+        name: 'publish_documentation_library_to_github',
+        description:
+          `Publishes SKILL.md per source under library/skills/{slug}/ and library/documentation-sources.json to ${LIBRARY_REPO_DEFAULT}. Requires RABBIT_MCP_GITHUB_TOKEN or GITHUB_TOKEN. Optional sourceId to publish one entry only (still rewrites full manifest).`,
+        inputSchema: {
+          type: 'object',
+          properties: {
+            sourceId: { type: 'string', description: 'If set, only this source is re-fetched and pushed (manifest still lists all)' },
+          },
+        },
+      },
+      {
+        name: 'pull_documentation_library_from_github',
+        description:
+          `Merges new entries from raw manifest on main: ${LIBRARY_MANIFEST_RAW}. Does not remove local-only sources. Clears SDK cache.`,
+        inputSchema: { type: 'object', properties: {} },
       },
       {
         name: 'generate_rabbit_creation_ideas',
@@ -475,7 +642,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
       }
 
-      const payload = await buildUnifiedKnowledgeIndex({ maxReadmeChars });
+      const payload = await buildUnifiedKnowledgeIndex({
+        maxReadmeChars,
+        documentationSources: storage.documentationLibrary?.sources || [],
+      });
       storage.sdkIndexCache = {
         payload,
         cachedAt: payload.fetchedAt,
@@ -738,6 +908,248 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       };
     }
 
+    if (name === 'register_documentation_source') {
+      const storage = await loadStorage();
+      let parsedUrl;
+      try {
+        parsedUrl = new URL(String(args.url));
+      } catch {
+        throw new Error('Invalid url (must be absolute http(s))');
+      }
+      if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+        throw new Error('Only http(s) URLs are allowed');
+      }
+      const slug = args.skillSlug ? docLib.slugify(args.skillSlug) : docLib.slugify(args.name);
+      const id = `doc_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+      const entry = {
+        id,
+        name: String(args.name).slice(0, 200),
+        url: parsedUrl.href,
+        skillSlug: slug,
+        addedAt: new Date().toISOString(),
+      };
+      storage.documentationLibrary.sources.push(entry);
+      storage.sdkIndexCache = null;
+      await saveStorage(storage);
+
+      let github = null;
+      if (args.autoPublishToGithub === true) {
+        const token = docLib.githubToken();
+        if (!token) {
+          github = { skipped: true, reason: 'No RABBIT_MCP_GITHUB_TOKEN or GITHUB_TOKEN' };
+        } else {
+          try {
+            const { text, contentType } = await docLib.fetchDocUrl(entry.url);
+            const normalized = docLib.normalizeFetchedText(text, contentType);
+            const pub = await docLib.publishSourceToGithub(
+              token,
+              docLib.DEFAULT_LIBRARY_REPO,
+              entry,
+              normalized
+            );
+            await docLib.publishManifestToGithub(
+              token,
+              docLib.DEFAULT_LIBRARY_REPO,
+              storage.documentationLibrary.sources
+            );
+            github = { ok: true, ...pub };
+          } catch (e) {
+            github = { error: e.message };
+          }
+        }
+      }
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify(
+              {
+                registered: entry,
+                hint: 'Call get_rabbit_sdk_knowledge_index(refreshCache:true) or discover_missing_local_skills / ensure_local_skill_for_registered_source',
+                github,
+              },
+              null,
+              2
+            ),
+          },
+        ],
+      };
+    }
+
+    if (name === 'list_documentation_sources') {
+      const storage = await loadStorage();
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify(
+              { count: storage.documentationLibrary.sources.length, sources: storage.documentationLibrary.sources },
+              null,
+              2
+            ),
+          },
+        ],
+      };
+    }
+
+    if (name === 'remove_documentation_source') {
+      if (args.confirm !== true) {
+        throw new Error('Must set confirm=true');
+      }
+      const storage = await loadStorage();
+      const before = storage.documentationLibrary.sources.length;
+      storage.documentationLibrary.sources = storage.documentationLibrary.sources.filter((s) => s.id !== args.id);
+      if (storage.documentationLibrary.sources.length === before) {
+        throw new Error(`No source with id ${args.id}`);
+      }
+      storage.sdkIndexCache = null;
+      await saveStorage(storage);
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify({ removed: args.id, remaining: storage.documentationLibrary.sources.length }, null, 2),
+          },
+        ],
+      };
+    }
+
+    if (name === 'discover_missing_local_skills') {
+      const storage = await loadStorage();
+      const d = await discoverMissingLocalSkills(storage);
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify(
+              {
+                ...d,
+                nextStep:
+                  d.missing.length > 0
+                    ? 'Call ensure_local_skill_for_registered_source for each sourceId in missing[].'
+                    : 'All registered sources have a local SKILL.md.',
+              },
+              null,
+              2
+            ),
+          },
+        ],
+      };
+    }
+
+    if (name === 'ensure_local_skill_for_registered_source') {
+      const storage = await loadStorage();
+      const source = storage.documentationLibrary.sources.find((s) => s.id === args.sourceId);
+      if (!source) {
+        throw new Error(`No documentation source with id ${args.sourceId}`);
+      }
+      const { text, contentType } = await docLib.fetchDocUrl(source.url);
+      const normalized = docLib.normalizeFetchedText(text, contentType);
+      const skillPath = await writeLocalSkillForSource(source, normalized);
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify({ wrote: skillPath, skillSlug: source.skillSlug }, null, 2),
+          },
+        ],
+      };
+    }
+
+    if (name === 'publish_documentation_library_to_github') {
+      const storage = await loadStorage();
+      const token = docLib.githubToken();
+      if (!token) {
+        throw new Error('Set RABBIT_MCP_GITHUB_TOKEN or GITHUB_TOKEN with repo scope for the library repo');
+      }
+      const repo = docLib.DEFAULT_LIBRARY_REPO;
+      const all = storage.documentationLibrary.sources;
+      if (!all.length) {
+        throw new Error('No documentation sources registered locally');
+      }
+      const toPublish = args.sourceId ? all.filter((s) => s.id === args.sourceId) : all;
+      if (args.sourceId && toPublish.length === 0) {
+        throw new Error(`sourceId not found: ${args.sourceId}`);
+      }
+      const results = [];
+      for (const source of toPublish) {
+        const { text, contentType } = await docLib.fetchDocUrl(source.url);
+        const normalized = docLib.normalizeFetchedText(text, contentType);
+        const pub = await docLib.publishSourceToGithub(token, repo, source, normalized);
+        results.push({ sourceId: source.id, skillSlug: source.skillSlug, ...pub });
+      }
+      const manifestResult = await docLib.publishManifestToGithub(token, repo, all);
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify(
+              {
+                repo,
+                publishedFiles: results.length,
+                results,
+                manifest: manifestResult?.content?.path || 'library/documentation-sources.json',
+              },
+              null,
+              2
+            ),
+          },
+        ],
+      };
+    }
+
+    if (name === 'pull_documentation_library_from_github') {
+      const storage = await loadStorage();
+      const res = await fetch(LIBRARY_MANIFEST_RAW, {
+        headers: { 'User-Agent': 'rabbit-r1-ideas-mcp' },
+      });
+      if (!res.ok) {
+        throw new Error(
+          `Could not fetch manifest (${res.status}). If the repo has no manifest yet, publish once with publish_documentation_library_to_github.`
+        );
+      }
+      const data = await res.json();
+      if (!data || !Array.isArray(data.sources)) {
+        throw new Error('Invalid manifest JSON: expected { sources: [...] }');
+      }
+      const local = storage.documentationLibrary.sources;
+      const ids = new Set(local.map((s) => s.id));
+      let added = 0;
+      for (const row of data.sources) {
+        if (row?.id && row?.url && row?.name && row?.skillSlug && !ids.has(row.id)) {
+          local.push({
+            id: row.id,
+            name: row.name,
+            url: row.url,
+            skillSlug: row.skillSlug,
+            addedAt: row.addedAt || new Date().toISOString(),
+            importedFromGithubManifest: true,
+          });
+          ids.add(row.id);
+          added++;
+        }
+      }
+      storage.sdkIndexCache = null;
+      await saveStorage(storage);
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify(
+              {
+                added,
+                totalSources: local.length,
+                manifestUrl: LIBRARY_MANIFEST_RAW,
+              },
+              null,
+              2
+            ),
+          },
+        ],
+      };
+    }
+
     throw new Error(`Unknown tool: ${name}`);
   } catch (error) {
     return {
@@ -772,6 +1184,12 @@ server.setRequestHandler(ListResourcesRequestSchema, async () => {
         description: 'Cached unified index (official GitHub + r1-create npm); may be empty until first tool call',
         mimeType: 'application/json',
       },
+      {
+        uri: 'rabbit://documentation/library',
+        name: 'Documentation library sources',
+        description: 'Registered URLs merged into get_rabbit_sdk_knowledge_index',
+        mimeType: 'application/json',
+      },
     ],
   };
 });
@@ -796,6 +1214,7 @@ server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
     const storage = await loadStorage();
     const stats = {
       totalIdeasGenerated: storage.suggestedIdeas.length,
+      documentationSourcesRegistered: storage.documentationLibrary?.sources?.length ?? 0,
       lastChecked: storage.lastChecked,
       repoLastUpdated: storage.repoCache?.updated || 'Never',
       sdkIndexCachedAt: storage.sdkIndexCache?.cachedAt || null,
@@ -823,6 +1242,27 @@ server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
           uri,
           mimeType: 'application/json',
           text: JSON.stringify(body, null, 2),
+        },
+      ],
+    };
+  }
+
+  if (uri === 'rabbit://documentation/library') {
+    const storage = await loadStorage();
+    return {
+      contents: [
+        {
+          uri,
+          mimeType: 'application/json',
+          text: JSON.stringify(
+            {
+              defaultGithubLibraryRepo: LIBRARY_REPO_DEFAULT,
+              manifestRawUrl: LIBRARY_MANIFEST_RAW,
+              sources: storage.documentationLibrary?.sources || [],
+            },
+            null,
+            2
+          ),
         },
       ],
     };
