@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-29T11:38:17.117Z",
+  "updatedAt": "2026-04-29T18:00:00.000Z",
   "repo": "Tourettes99/rabbit-r1-sdk-idea-helper-mcp",
   "sources": [
     {
@@ -8,6 +8,13 @@
       "url": "https://andr3w-hilton.github.io/rabbit-r1-creations-public/tips.html",
       "skillSlug": "rabbit-r1-creations-tips",
       "addedAt": "2026-04-29T11:30:37.003Z"
+    },
+    {
+      "id": "doc_1745950800000_tangledwebref",
+      "name": "The Tangled Web — securing modern web applications (reference)",
+      "url": "https://raw.githubusercontent.com/Tourettes99/rabbit-r1-sdk-idea-helper-mcp/main/library/docs/the-tangled-web-securing-web-applications.md",
+      "skillSlug": "the-tangled-web-securing-web-applications",
+      "addedAt": "2026-04-29T18:00:00.000Z"
     }
   ]
 }
