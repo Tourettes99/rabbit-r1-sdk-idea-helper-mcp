@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-29T13:45:00.000Z",
+  "updatedAt": "2026-04-29T14:00:00.000Z",
   "repo": "Tourettes99/rabbit-r1-sdk-idea-helper-mcp",
   "sources": [
     {
@@ -22,6 +22,13 @@
       "url": "https://raw.githubusercontent.com/SixArm/ui-ux-design-guide/main/index.md",
       "skillSlug": "sixarm-ui-ux-design-guide",
       "addedAt": "2026-04-29T13:45:00.000Z"
+    },
+    {
+      "id": "doc_1745930100000_charlaxpro",
+      "name": "Professional programming (charlax)",
+      "url": "https://raw.githubusercontent.com/charlax/professional-programming/master/README.md",
+      "skillSlug": "charlax-professional-programming",
+      "addedAt": "2026-04-29T14:00:00.000Z"
     }
   ]
 }
