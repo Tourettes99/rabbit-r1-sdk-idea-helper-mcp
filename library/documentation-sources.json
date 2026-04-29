@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-29T18:00:00.000Z",
+  "updatedAt": "2026-04-29T13:45:00.000Z",
   "repo": "Tourettes99/rabbit-r1-sdk-idea-helper-mcp",
   "sources": [
     {
@@ -15,6 +15,13 @@
       "url": "https://raw.githubusercontent.com/Tourettes99/rabbit-r1-sdk-idea-helper-mcp/main/library/docs/the-tangled-web-securing-web-applications.md",
       "skillSlug": "the-tangled-web-securing-web-applications",
       "addedAt": "2026-04-29T18:00:00.000Z"
+    },
+    {
+      "id": "doc_1745928300000_sixarmuiux",
+      "name": "UI/UX Design Guide (SixArm)",
+      "url": "https://raw.githubusercontent.com/SixArm/ui-ux-design-guide/main/index.md",
+      "skillSlug": "sixarm-ui-ux-design-guide",
+      "addedAt": "2026-04-29T13:45:00.000Z"
     }
   ]
 }
